@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using Harmony;
-using Verse.AI;
+using RimWorld;
 
 namespace ReverseCommands
 {
@@ -20,6 +20,30 @@ namespace ReverseCommands
 				Find.WindowStack.TryRemove(labelMenu, sound);
 				labelMenu = null;
 			}
+		}
+
+		public static Dictionary<string, Dictionary<Pawn, FloatMenuOption>> GetPawnActions()
+		{
+			var result = new Dictionary<string, Dictionary<Pawn, FloatMenuOption>>();
+
+			var firstSelectedPawn = Find.Selector.SelectedObjects.FirstOrDefault(o => o is Pawn && (o as Pawn).IsColonist);
+			if (firstSelectedPawn != null) return result;
+
+			Find.VisibleMap.mapPawns.FreeColonists.Where(PawnUsable).Do(pawn =>
+			{
+				var list = FloatMenuMakerMap.ChoicesAtFor(UI.MouseMapPosition(), pawn);
+				list.Where(option => option.Label != "Go here").Do(option =>
+				{
+					var dict = result.GetValueSafe(option.Label);
+					if (dict == null)
+					{
+						dict = new Dictionary<Pawn, FloatMenuOption>();
+						result[option.Label] = dict;
+					}
+					dict[pawn] = option;
+				});
+			});
+			return result;
 		}
 
 		public static bool PawnUsable(Pawn pawn)

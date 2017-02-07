@@ -4,7 +4,6 @@ using RimWorld;
 using UnityEngine;
 using Verse;
 using System.Linq;
-using System.Collections.Generic;
 using Verse.AI;
 using Harmony.ILCopying;
 
@@ -60,8 +59,9 @@ namespace ReverseCommands
 		static bool Prefix()
 		{
 			if (Event.current.type != EventType.MouseDown) return true;
+			Tools.CloseLabelMenu(true);
 			if (Event.current.button != 1) return true;
-			return Find.Selector.NumSelected > 0;
+			return Tools.GetPawnActions().Count() == 0;
 		}
 	}
 
@@ -75,35 +75,13 @@ namespace ReverseCommands
 				Tools.CloseLabelMenu(true);
 
 			if (Event.current.type != EventType.MouseDown) return true;
-
-			Tools.CloseLabelMenu(true);
-
 			if (Event.current.button != 1) return true;
 
-			var firstSelectedPawn = __instance.SelectedObjects
-				.FirstOrDefault(o => o is Pawn && (o as Pawn).IsColonist);
-			if (firstSelectedPawn != null) return true;
+			var labeledPawnActions = Tools.GetPawnActions();
+			if (labeledPawnActions.Count() == 0) return true;
 
 			var cell = UI.MouseCell();
-
-			var labeledPawnActions = new Dictionary<string, Dictionary<Pawn, FloatMenuOption>>();
-			Find.VisibleMap.mapPawns.FreeColonists.Where(Tools.PawnUsable).Do(pawn =>
-			{
-				PathInfo.AddInfo(pawn, cell);
-
-				var list = FloatMenuMakerMap.ChoicesAtFor(UI.MouseMapPosition(), pawn);
-				list.Where(option => option.Label != "Go here").Do(option =>
-				{
-					var dict = labeledPawnActions.GetValueSafe(option.Label);
-					if (dict == null)
-					{
-						dict = new Dictionary<Pawn, FloatMenuOption>();
-						labeledPawnActions[option.Label] = dict;
-					}
-					dict[pawn] = option;
-				});
-			});
-			if (labeledPawnActions.Count() == 0) return true;
+			Find.VisibleMap.mapPawns.FreeColonists.Where(Tools.PawnUsable).Do(pawn => PathInfo.AddInfo(pawn, cell));
 
 			var items = labeledPawnActions.Keys.Select(label => {
 				var dict = labeledPawnActions[label];

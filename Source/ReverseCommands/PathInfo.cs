@@ -41,7 +41,13 @@ namespace ReverseCommands
 		{
 			current = null;
 
-			storage.Values.Do(info => info.path.ReleaseToPool());
+			storage.Values.Do(info => {
+				if (info != null)
+				{
+					var path = info.path;
+					if (path != null) path.ReleaseToPool();	
+				}
+			});
 			storage.Clear();
 		}
 
@@ -67,7 +73,7 @@ namespace ReverseCommands
 			{
 				var traverseParams = TraverseParms.For(pawn, Danger.Deadly, TraverseMode.PassDoors, false);
 				if (path != null) path.ReleaseToPool();
-				path = pawn.Map.pathFinder.FindPath(pawn.Position, cell, traverseParams, PathEndMode.OnCell);
+				path = pawn.Map.pathFinder.FindPath(pawn.Position, cell, traverseParams, PathEndMode.Touch);
 				lastPawnLocation = pos;
 			}
 			return path;
@@ -76,11 +82,11 @@ namespace ReverseCommands
 		public string GetJobReport()
 		{
 			var m = Math.Floor(GetPath(pawn).TotalCost * 60f / GenDate.TicksPerHour);
-			if (m < 0) m = 0;
-			var mins = "[" + m + " min]";
+			var mins = "";
+			if (m > 0) mins = ", [" + m + " min]";
 			var job = pawn.jobs.curJob != null ? (", " + pawn.jobs.curDriver.GetReport()) : "";
 			if (job.EndsWith(".", StringComparison.Ordinal)) job = job.Substring(0, job.Length - 1);
-			return pawn.NameStringShort + job + ", " + mins;
+			return pawn.NameStringShort + job + mins;
 		}
 	}
 }
