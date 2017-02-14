@@ -16,24 +16,29 @@ namespace ReverseCommands
 		{
 			var harmony = HarmonyInstance.Create("net.pardeike.reversecommands");
 			harmony.PatchAll(Assembly.GetExecutingAssembly());
-			SpecialAllPawnsSpawnedCountFix(harmony);
 		}
+	}
 
-		static void SpecialAllPawnsSpawnedCountFix(HarmonyInstance harmony)
-		{
-			var original = AccessTools.Method(typeof(PawnPathPool), "GetEmptyPawnPath");
-			var replacer = new HarmonyProcessor(Priority.Normal, new string[0], new string[0]);
-			replacer.AddILProcessor(new MethodReplacer(
-				AccessTools.Method(typeof(MapPawns), "get_AllPawnsSpawnedCount"), 
-				AccessTools.Method(typeof(Main), "AllPawnsSpawnedCountx2")
-			));
-			harmony.Patch(original, null, null, replacer);
-		}
-
+	[HarmonyPatch(typeof(PawnPathPool))]
+	[HarmonyPatch("GetEmptyPawnPath")]
+	class Patch0
+	{
 		static int AllPawnsSpawnedCountx2(MapPawns instance)
 		{
 			// all we want is some extra allocation
 			return instance.AllPawnsSpawnedCount * 5 + 2;
+		}
+
+		static HarmonyProcessor Processors(MethodBase original)
+		{
+			var processor = new HarmonyProcessor();
+			processor.AddILProcessor(
+				new MethodReplacer(
+					AccessTools.Method(typeof(MapPawns), "get_AllPawnsSpawnedCount"),
+					AccessTools.Method(typeof(Patch0), "AllPawnsSpawnedCountx2")
+				)
+			);
+			return processor;
 		}
 	}
 
@@ -83,7 +88,8 @@ namespace ReverseCommands
 			var cell = UI.MouseCell();
 			Find.VisibleMap.mapPawns.FreeColonists.Where(Tools.PawnUsable).Do(pawn => PathInfo.AddInfo(pawn, cell));
 
-			var items = labeledPawnActions.Keys.Select(label => {
+			var items = labeledPawnActions.Keys.Select(label =>
+			{
 				var dict = labeledPawnActions[label];
 				return Tools.MakeMenuItemForLabel(cell, label, dict);
 			}).ToList();
