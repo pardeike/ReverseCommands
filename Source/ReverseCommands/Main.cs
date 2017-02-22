@@ -5,7 +5,6 @@ using UnityEngine;
 using Verse;
 using System.Linq;
 using Verse.AI;
-using Harmony.ILCopying;
 
 namespace ReverseCommands
 {
@@ -32,7 +31,7 @@ namespace ReverseCommands
 		static HarmonyProcessor Processors(MethodBase original)
 		{
 			var processor = new HarmonyProcessor();
-			processor.AddILProcessor(
+			processor.Add(
 				new MethodReplacer(
 					AccessTools.Method(typeof(MapPawns), "get_AllPawnsSpawnedCount"),
 					AccessTools.Method(typeof(Patch0), "AllPawnsSpawnedCountx2")
