@@ -28,7 +28,7 @@ namespace ReverseCommands
 			return instance.AllPawnsSpawnedCount * 5 + 2;
 		}
 
-		static HarmonyProcessor Processors(MethodBase original)
+		static HarmonyProcessor ProcessorFactory(MethodBase original)
 		{
 			var processor = new HarmonyProcessor();
 			processor.Add(
