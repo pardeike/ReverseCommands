@@ -5,6 +5,7 @@ using UnityEngine;
 using Verse;
 using System.Linq;
 using Verse.AI;
+using System.Collections.Generic;
 
 namespace ReverseCommands
 {
@@ -28,16 +29,13 @@ namespace ReverseCommands
 			return instance.AllPawnsSpawnedCount * 5 + 2;
 		}
 
-		static HarmonyProcessor ProcessorFactory(MethodBase original)
+		static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
 		{
-			var processor = new HarmonyProcessor();
-			processor.Add(
-				new MethodReplacer(
-					AccessTools.Method(typeof(MapPawns), "get_AllPawnsSpawnedCount"),
-					AccessTools.Method(typeof(Patch0), "AllPawnsSpawnedCountx2")
-				)
+			return Transpilers.MethodReplacer(
+				instructions,
+				AccessTools.Method(typeof(MapPawns), "get_AllPawnsSpawnedCount"),
+				AccessTools.Method(typeof(Patch0), "AllPawnsSpawnedCountx2")
 			);
-			return processor;
 		}
 	}
 
