@@ -31,8 +31,7 @@ namespace ReverseCommands
 
 		static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
 		{
-			return Transpilers.MethodReplacer(
-				instructions,
+			return instructions.MethodReplacer(
 				AccessTools.Method(typeof(MapPawns), "get_AllPawnsSpawnedCount"),
 				AccessTools.Method(typeof(Patch0), "AllPawnsSpawnedCountx2")
 			);
@@ -63,7 +62,7 @@ namespace ReverseCommands
 			if (Event.current.type != EventType.MouseDown) return true;
 			Tools.CloseLabelMenu(true);
 			if (Event.current.button != 1) return true;
-			return Tools.GetPawnActions().Count() == 0;
+			return !Tools.GetPawnActions().Any();
 		}
 	}
 
@@ -71,7 +70,7 @@ namespace ReverseCommands
 	[HarmonyPatch("HandleMapClicks")]
 	class Patch3
 	{
-		static bool Prefix(Selector __instance)
+		static bool Prefix()
 		{
 			if (Event.current.isKey && Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.Escape)
 				Tools.CloseLabelMenu(true);
@@ -80,7 +79,7 @@ namespace ReverseCommands
 			if (Event.current.button != 1) return true;
 
 			var labeledPawnActions = Tools.GetPawnActions();
-			if (labeledPawnActions.Count() == 0) return true;
+			if (!labeledPawnActions.Any()) return true;
 
 			var cell = UI.MouseCell();
 			Find.VisibleMap.mapPawns.FreeColonists.Where(Tools.PawnUsable).Do(pawn => PathInfo.AddInfo(pawn, cell));
@@ -88,7 +87,7 @@ namespace ReverseCommands
 			var items = labeledPawnActions.Keys.Select(label =>
 			{
 				var dict = labeledPawnActions[label];
-				return Tools.MakeMenuItemForLabel(cell, label, dict);
+				return Tools.MakeMenuItemForLabel(label, dict);
 			}).ToList();
 
 			Tools.labelMenu = new FloatMenuLabels(items);

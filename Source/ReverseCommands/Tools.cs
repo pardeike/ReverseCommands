@@ -55,17 +55,17 @@ namespace ReverseCommands
 				       && pawn.Map == Find.VisibleMap;
 		}
 
-		public static FloatMenuOption MakeMenuItemForLabel(IntVec3 cell, string label, Dictionary<Pawn, FloatMenuOption> dict)
+		public static FloatMenuOption MakeMenuItemForLabel(string label, Dictionary<Pawn, FloatMenuOption> dict)
 		{
 			var pawns = dict.Keys.ToList();
 			var options = dict.Values.ToList();
 			var labelFixed = pawns.Count() == 1 ? (pawns[0].NameStringShort + ": " + label) : label;
-			var option = new FloatMenuOptionNoClose(labelFixed, () => {
-
+			var option = new FloatMenuOptionNoClose(labelFixed, () =>
+			{
 				if (options.Count() == 1 && options[0].Disabled == false)
 				{
 					var action = options[0].action;
-					if (action != null) 
+					if (action != null)
 					{
 						CloseLabelMenu(true);
 						action();
@@ -77,7 +77,8 @@ namespace ReverseCommands
 					var actions = new List<FloatMenuOption>();
 					pawns.OrderBy(pawn => -PathInfo.GetPath(pawn).TotalCost).Do(pawn =>
 					{
-						actions.Add(new FloatMenuOptionPawn(pawn, () => {
+						actions.Add(new FloatMenuOptionPawn(pawn, () =>
+						{
 							var pawnOption = dict[pawn];
 							if (pawnOption != null)
 							{
@@ -85,7 +86,8 @@ namespace ReverseCommands
 								CloseLabelMenu(true);
 								pawnOption.action();
 							}
-						}, (MenuOptionPriority)i++, () => {
+						}, (MenuOptionPriority)i++, () =>
+						{
 							PathInfo.current = pawn;
 						}));
 					});
@@ -93,8 +95,10 @@ namespace ReverseCommands
 					Find.WindowStack.Add(actionMenu);
 				}
 
-			});
-			option.Disabled = options.All(o => o.Disabled);
+			})
+			{
+				Disabled = options.All(o => o.Disabled)
+			};
 			return option;
 		}
 	}
