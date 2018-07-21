@@ -41,11 +41,12 @@ namespace ReverseCommands
 		{
 			current = null;
 
-			storage.Values.Do(info => {
+			storage.Values.Do(info =>
+			{
 				if (info != null)
 				{
 					var path = info.path;
-					if (path != null) path.ReleaseToPool();	
+					if (path != null) path.ReleaseToPool();
 				}
 			});
 			storage.Clear();
@@ -86,7 +87,7 @@ namespace ReverseCommands
 			if (m > 0) mins = ", [" + m + " min]";
 			var job = pawn.jobs.curJob != null ? (", " + pawn.jobs.curDriver.GetReport()) : "";
 			if (job.EndsWith(".", StringComparison.Ordinal)) job = job.Substring(0, job.Length - 1);
-			return pawn.NameStringShort + job + mins;
+			return pawn.Name.ToStringShort + job + mins;
 		}
 	}
 }

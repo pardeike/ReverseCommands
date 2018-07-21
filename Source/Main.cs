@@ -82,7 +82,7 @@ namespace ReverseCommands
 			if (!labeledPawnActions.Any()) return true;
 
 			var cell = UI.MouseCell();
-			Find.VisibleMap.mapPawns.FreeColonists.Where(Tools.PawnUsable).Do(pawn => PathInfo.AddInfo(pawn, cell));
+			Find.CurrentMap.mapPawns.FreeColonists.Where(Tools.PawnUsable).Do(pawn => PathInfo.AddInfo(pawn, cell));
 
 			var items = labeledPawnActions.Keys.Select(label =>
 			{

@@ -17,7 +17,8 @@ namespace ReverseCommands
 
 		public override void DoWindowContents(Rect rect)
 		{
-			options.Do(o => {
+			options.Do(o =>
+			{
 				var option = o as FloatMenuOptionPawn;
 				option.Label = PathInfo.GetJobReport(option.pawn);
 				option.SetSizeMode(FloatMenuSizeMode.Normal);
@@ -45,9 +46,9 @@ namespace ReverseCommands
 			this.pawn = pawn;
 		}
 
-		public override bool DoGUI(Rect rect, bool colonistOrdering)
+		public override bool DoGUI(Rect rect, bool colonistOrdering, FloatMenu floatMenu)
 		{
-			base.DoGUI(rect, colonistOrdering);
+			base.DoGUI(rect, colonistOrdering, floatMenu);
 			return false; // don't close after an item is selected
 		}
 	}

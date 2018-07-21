@@ -29,7 +29,7 @@ namespace ReverseCommands
 			var firstSelectedPawn = Find.Selector.SelectedObjects.FirstOrDefault(o => o is Pawn && (o as Pawn).IsColonist);
 			if (firstSelectedPawn != null) return result;
 
-			Find.VisibleMap.mapPawns.FreeColonists.Where(PawnUsable).Do(pawn =>
+			Find.CurrentMap.mapPawns.FreeColonists.Where(PawnUsable).Do(pawn =>
 			{
 				var list = FloatMenuMakerMap.ChoicesAtFor(UI.MouseMapPosition(), pawn);
 				list.Where(option => option.Label != "Go here").Do(option =>
@@ -49,17 +49,17 @@ namespace ReverseCommands
 		public static bool PawnUsable(Pawn pawn)
 		{
 			return pawn.IsColonistPlayerControlled
-				       && pawn.Dead == false 
-				       && pawn.Spawned
-				       && pawn.Downed == false
-				       && pawn.Map == Find.VisibleMap;
+						 && pawn.Dead == false
+						 && pawn.Spawned
+						 && pawn.Downed == false
+						 && pawn.Map == Find.CurrentMap;
 		}
 
 		public static FloatMenuOption MakeMenuItemForLabel(string label, Dictionary<Pawn, FloatMenuOption> dict)
 		{
 			var pawns = dict.Keys.ToList();
 			var options = dict.Values.ToList();
-			var labelFixed = pawns.Count() == 1 ? (pawns[0].NameStringShort + ": " + label) : label;
+			var labelFixed = pawns.Count() == 1 ? (pawns[0].Name.ToStringShort + ": " + label) : label;
 			var option = new FloatMenuOptionNoClose(labelFixed, () =>
 			{
 				if (options.Count() == 1 && options[0].Disabled == false)
