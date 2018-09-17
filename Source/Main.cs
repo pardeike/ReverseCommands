@@ -1,11 +1,11 @@
-﻿using System.Reflection;
-using Harmony;
+﻿using Harmony;
 using RimWorld;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using UnityEngine;
 using Verse;
-using System.Linq;
 using Verse.AI;
-using System.Collections.Generic;
 
 namespace ReverseCommands
 {
@@ -16,6 +16,17 @@ namespace ReverseCommands
 		{
 			var harmony = HarmonyInstance.Create("net.pardeike.reversecommands");
 			harmony.PatchAll(Assembly.GetExecutingAssembly());
+			FireStats.Trigger(true);
+		}
+	}
+
+	[HarmonyPatch(typeof(Game))]
+	[HarmonyPatch("FinalizeInit")]
+	static class Game_FinalizeInit_Patch
+	{
+		static void Postfix()
+		{
+			FireStats.Trigger(false);
 		}
 	}
 

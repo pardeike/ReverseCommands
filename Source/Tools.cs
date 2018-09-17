@@ -1,8 +1,8 @@
-﻿using Verse;
-using System.Linq;
-using System.Collections.Generic;
-using Harmony;
+﻿using Harmony;
 using RimWorld;
+using System.Collections.Generic;
+using System.Linq;
+using Verse;
 
 namespace ReverseCommands
 {
@@ -73,7 +73,7 @@ namespace ReverseCommands
 				}
 				else
 				{
-					int i = 0;
+					var i = 0;
 					var actions = new List<FloatMenuOption>();
 					pawns.OrderBy(pawn => -PathInfo.GetPath(pawn).TotalCost).Do(pawn =>
 					{
