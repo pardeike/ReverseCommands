@@ -16,7 +16,6 @@ namespace ReverseCommands
 		{
 			var harmony = HarmonyInstance.Create("net.pardeike.reversecommands");
 			harmony.PatchAll(Assembly.GetExecutingAssembly());
-			FireStats.Trigger(true);
 		}
 	}
 
@@ -26,7 +25,7 @@ namespace ReverseCommands
 	{
 		static void Postfix()
 		{
-			FireStats.Trigger(false);
+			ModCounter.Trigger();
 		}
 	}
 
