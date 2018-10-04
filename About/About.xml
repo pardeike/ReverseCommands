@@ -3,7 +3,7 @@
 	<name>Reverse Commands</name>
 	<author>Andreas Pardeike</author>
 	<url>https://ludeon.com/forums/index.php?topic=30339.0</url>
-	<targetVersion>0.19.0</targetVersion>
+	<targetVersion>1.0.0</targetVersion>
 	<description>Reverses the context menu so you can select something to interact with, followed by an action and the colonist that should execute that action. No need to select colonists first and much less scrolling through the map.
 
 Powered by Harmony Patch Library
