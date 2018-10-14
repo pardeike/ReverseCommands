@@ -26,10 +26,13 @@ namespace ReverseCommands
 		{
 			var result = new Dictionary<string, Dictionary<Pawn, FloatMenuOption>>();
 
-			var firstSelectedPawn = Find.Selector.SelectedObjects.FirstOrDefault(o => o is Pawn && (o as Pawn).IsColonist);
+			var firstSelectedPawn = Find.Selector.SelectedObjects?.FirstOrDefault(o => o is Pawn && (o as Pawn).IsColonist);
 			if (firstSelectedPawn != null) return result;
 
-			Find.CurrentMap.mapPawns.FreeColonists.Where(PawnUsable).Do(pawn =>
+			var map = Find.CurrentMap;
+			if (map == null || map.mapPawns == null) return result;
+
+			map.mapPawns.FreeColonists.Where(PawnUsable).Do(pawn =>
 			{
 				var list = FloatMenuMakerMap.ChoicesAtFor(UI.MouseMapPosition(), pawn);
 				list.Where(option => option.Label != "Go here").Do(option =>
