@@ -1,4 +1,4 @@
-﻿using Harmony;
+﻿using HarmonyLib;
 using RimWorld;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +14,7 @@ namespace ReverseCommands
 	{
 		static Main()
 		{
-			var harmony = HarmonyInstance.Create("net.pardeike.reversecommands");
+			var harmony = new Harmony("net.pardeike.reversecommands");
 			harmony.PatchAll(Assembly.GetExecutingAssembly());
 		}
 	}
