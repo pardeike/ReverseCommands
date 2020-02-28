@@ -15,7 +15,7 @@ namespace ReverseCommands
 		static Main()
 		{
 			var harmony = new Harmony("net.pardeike.reversecommands");
-			harmony.PatchAll(Assembly.GetExecutingAssembly());
+			harmony.PatchAll();
 		}
 	}
 
