@@ -11,7 +11,7 @@ namespace ReverseCommands
 	public class PathInfo
 	{
 		public static Pawn current;
-		static Dictionary<Pawn, PathInfo> storage = new Dictionary<Pawn, PathInfo>();
+		static readonly Dictionary<Pawn, PathInfo> storage = new Dictionary<Pawn, PathInfo>();
 
 		public static List<Pawn> GetPawns()
 		{

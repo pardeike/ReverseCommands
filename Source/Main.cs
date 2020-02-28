@@ -23,7 +23,7 @@ namespace ReverseCommands
 	[HarmonyPatch("FinalizeInit")]
 	static class Game_FinalizeInit_Patch
 	{
-		static void Postfix()
+		public static void Postfix()
 		{
 			ModCounter.Trigger();
 		}
@@ -33,13 +33,13 @@ namespace ReverseCommands
 	[HarmonyPatch("GetEmptyPawnPath")]
 	class Patch0
 	{
-		static int AllPawnsSpawnedCountx2(MapPawns instance)
+		public static int AllPawnsSpawnedCountx2(MapPawns instance)
 		{
 			// all we want is some extra allocation
 			return instance.AllPawnsSpawnedCount * 5 + 2;
 		}
 
-		static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+		public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
 		{
 			return instructions.MethodReplacer(
 				AccessTools.Method(typeof(MapPawns), "get_AllPawnsSpawnedCount"),
@@ -52,7 +52,7 @@ namespace ReverseCommands
 	[HarmonyPatch("DrawDynamicThings")]
 	class Patch1
 	{
-		static void Prefix()
+		public static void Prefix()
 		{
 			if (PathInfo.current != null)
 			{
@@ -67,7 +67,7 @@ namespace ReverseCommands
 	[HarmonyPatch("HandleLowPriorityShortcuts")]
 	class Patch2
 	{
-		static bool Prefix()
+		public static bool Prefix()
 		{
 			if (Event.current.type != EventType.MouseDown) return true;
 			Tools.CloseLabelMenu(true);
@@ -80,7 +80,7 @@ namespace ReverseCommands
 	[HarmonyPatch("HandleMapClicks")]
 	class Patch3
 	{
-		static bool Prefix()
+		public static bool Prefix()
 		{
 			if (Event.current.isKey && Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.Escape)
 				Tools.CloseLabelMenu(true);
