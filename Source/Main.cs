@@ -1,8 +1,8 @@
 ﻿using HarmonyLib;
 using RimWorld;
+using RimWorld.Planet;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using UnityEngine;
 using Verse;
 using Verse.AI;
@@ -69,6 +69,7 @@ namespace ReverseCommands
 	{
 		public static bool Prefix()
 		{
+			if (WorldRendererUtility.WorldRenderedNow) return true;
 			if (Event.current.type != EventType.MouseDown) return true;
 			Tools.CloseLabelMenu(true);
 			if (Event.current.button != 1) return true;
@@ -82,6 +83,8 @@ namespace ReverseCommands
 	{
 		public static bool Prefix()
 		{
+			if (WorldRendererUtility.WorldRenderedNow) return true;
+
 			if (Event.current.isKey && Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.Escape)
 				Tools.CloseLabelMenu(true);
 

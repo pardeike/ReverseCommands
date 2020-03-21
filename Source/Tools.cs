@@ -17,7 +17,7 @@ namespace ReverseCommands
 		{
 			if (labelMenu != null)
 			{
-				Find.WindowStack.TryRemove(labelMenu, sound);
+				_ = Find.WindowStack.TryRemove(labelMenu, sound);
 				labelMenu = null;
 			}
 		}
