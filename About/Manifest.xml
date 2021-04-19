@@ -15,6 +15,6 @@
   </loadBefore>
   <loadAfter>
   </loadAfter>
-  <manifestUri>https://raw.githubusercontent.com/pardeike/ReverseCommands/master/About/Manifest.xml</manifestUri>
+  <manifestUri>https://raw.githubusercontent.com/pardeike/ReverseCommands/latest/About/Manifest.xml</manifestUri>
   <downloadUri>https://github.com/pardeike/ReverseCommands/releases/latest</downloadUri>
 </Manifest>
