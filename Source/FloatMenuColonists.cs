@@ -48,7 +48,7 @@ namespace ReverseCommands
 
 		public override bool DoGUI(Rect rect, bool colonistOrdering, FloatMenu floatMenu)
 		{
-			base.DoGUI(rect, colonistOrdering, floatMenu);
+			_ = base.DoGUI(rect, colonistOrdering, floatMenu);
 			return false; // don't close after an item is selected
 		}
 	}
