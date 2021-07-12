@@ -19,8 +19,7 @@ namespace ReverseCommands
 		}
 	}
 
-	[HarmonyPatch(typeof(Game))]
-	[HarmonyPatch("FinalizeInit")]
+	[HarmonyPatch(typeof(Game), nameof(Game.FinalizeInit))]
 	static class Game_FinalizeInit_Patch
 	{
 		public static void Postfix()
@@ -29,9 +28,8 @@ namespace ReverseCommands
 		}
 	}
 
-	[HarmonyPatch(typeof(PawnPathPool))]
-	[HarmonyPatch("GetEmptyPawnPath")]
-	class Patch0
+	[HarmonyPatch(typeof(PawnPathPool), nameof(PawnPathPool.GetEmptyPawnPath))]
+	class PawnPathPool_GetEmptyPawnPath_Patch
 	{
 		public static int AllPawnsSpawnedCountx2(MapPawns instance)
 		{
@@ -43,14 +41,13 @@ namespace ReverseCommands
 		{
 			return instructions.MethodReplacer(
 				AccessTools.Method(typeof(MapPawns), "get_AllPawnsSpawnedCount"),
-				AccessTools.Method(typeof(Patch0), "AllPawnsSpawnedCountx2")
+				SymbolExtensions.GetMethodInfo(() => AllPawnsSpawnedCountx2(default))
 			);
 		}
 	}
 
-	[HarmonyPatch(typeof(DynamicDrawManager))]
-	[HarmonyPatch("DrawDynamicThings")]
-	class Patch1
+	[HarmonyPatch(typeof(DynamicDrawManager), nameof(DynamicDrawManager.DrawDynamicThings))]
+	class DynamicDrawManager_DrawDynamicThings_Patch
 	{
 		public static void Prefix()
 		{
@@ -63,9 +60,8 @@ namespace ReverseCommands
 		}
 	}
 
-	[HarmonyPatch(typeof(MainTabsRoot))]
-	[HarmonyPatch("HandleLowPriorityShortcuts")]
-	class Patch2
+	[HarmonyPatch(typeof(MainTabsRoot), nameof(MainTabsRoot.HandleLowPriorityShortcuts))]
+	class MainTabsRoot_HandleLowPriorityShortcuts_Patch
 	{
 		public static bool Prefix()
 		{
@@ -77,9 +73,8 @@ namespace ReverseCommands
 		}
 	}
 
-	[HarmonyPatch(typeof(Selector))]
-	[HarmonyPatch("HandleMapClicks")]
-	class Patch3
+	[HarmonyPatch(typeof(Selector), nameof(Selector.HandleMapClicks))]
+	class Selector_HandleMapClicks_Patch
 	{
 		public static bool Prefix()
 		{

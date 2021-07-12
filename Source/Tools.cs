@@ -2,6 +2,7 @@
 using RimWorld;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 using Verse;
 
 namespace ReverseCommands
@@ -52,10 +53,10 @@ namespace ReverseCommands
 		public static bool PawnUsable(Pawn pawn)
 		{
 			return pawn.IsColonistPlayerControlled
-						 && pawn.Dead == false
-						 && pawn.Spawned
-						 && pawn.Downed == false
-						 && pawn.Map == Find.CurrentMap;
+				&& pawn.Dead == false
+				&& pawn.Spawned
+				&& pawn.Downed == false
+				&& pawn.Map == Find.CurrentMap;
 		}
 
 		public static FloatMenuOption MakeMenuItemForLabel(string label, Dictionary<Pawn, FloatMenuOption> dict)
@@ -89,10 +90,8 @@ namespace ReverseCommands
 								CloseLabelMenu(true);
 								pawnOption.action();
 							}
-						}, (MenuOptionPriority)i++, () =>
-						{
-							PathInfo.current = pawn;
-						}));
+						},
+						(MenuOptionPriority)i++, (Rect rect) => PathInfo.current = pawn));
 					});
 					actionMenu = new FloatMenuColonists(actions, null);
 					Find.WindowStack.Add(actionMenu);

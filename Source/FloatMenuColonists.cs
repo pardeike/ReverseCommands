@@ -40,7 +40,7 @@ namespace ReverseCommands
 	{
 		public Pawn pawn;
 
-		public FloatMenuOptionPawn(Pawn pawn, Action action, MenuOptionPriority priority, Action mouseOverAction)
+		public FloatMenuOptionPawn(Pawn pawn, Action action, MenuOptionPriority priority, Action<Rect> mouseOverAction)
 			: base("", action, priority, mouseOverAction, null, 0, null, null)
 		{
 			this.pawn = pawn;
