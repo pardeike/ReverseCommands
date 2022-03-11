@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using Brrainz;
+using HarmonyLib;
 using RimWorld;
 using RimWorld.Planet;
 using System.Collections.Generic;
@@ -16,6 +17,8 @@ namespace ReverseCommands
 		{
 			var harmony = new Harmony("net.pardeike.reversecommands");
 			harmony.PatchAll();
+
+			CrossPromotion.Install(76561197973010050);
 		}
 	}
 
