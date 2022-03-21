@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Verse;
 
@@ -17,12 +18,13 @@ namespace ReverseCommands
 
 		public override void DoWindowContents(Rect rect)
 		{
-			options.Do(o =>
-			{
-				var option = o as FloatMenuOptionPawn;
-				option.Label = PathInfo.GetJobReport(option.pawn);
-				option.SetSizeMode(FloatMenuSizeMode.Normal);
-			});
+			options
+				.OfType<FloatMenuOptionPawn>()
+				.Do(option =>
+				{
+					option.Label = PathInfo.GetJobReport(option.pawn);
+					option.SetSizeMode(FloatMenuSizeMode.Normal);
+				});
 			windowRect = new Rect(windowRect.x, windowRect.y, InitialSize.x, InitialSize.y);
 			base.DoWindowContents(windowRect);
 		}

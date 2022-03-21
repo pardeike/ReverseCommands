@@ -32,6 +32,7 @@ namespace ReverseCommands
 
 		public static string GetJobReport(Pawn pawn)
 		{
+			if (pawn == null) return "";
 			var val = storage.GetValueSafe(pawn);
 			if (val == null) return "";
 			return val.GetJobReport();
