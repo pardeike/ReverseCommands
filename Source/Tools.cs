@@ -12,7 +12,7 @@ namespace ReverseCommands
 		public static FloatMenuLabels labelMenu;
 		public static FloatMenuColonists actionMenu;
 
-		public static Dictionary<Pawn, PathInfo> PawnInfo = new Dictionary<Pawn, PathInfo>();
+		public static Dictionary<Pawn, PathInfo> PawnInfo = [];
 
 		public static void CloseLabelMenu(bool sound)
 		{
@@ -43,7 +43,7 @@ namespace ReverseCommands
 					var dict = result.GetValueSafe(option.Label);
 					if (dict == null)
 					{
-						dict = new Dictionary<Pawn, FloatMenuOption>();
+						dict = [];
 						result[option.Label] = dict;
 					}
 					dict[pawn] = option;

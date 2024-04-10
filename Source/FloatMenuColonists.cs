@@ -38,15 +38,9 @@ namespace ReverseCommands
 		}
 	}
 
-	public class FloatMenuOptionPawn : FloatMenuOption
+	public class FloatMenuOptionPawn(Pawn pawn, Action action, MenuOptionPriority priority, Action<Rect> mouseOverAction) : FloatMenuOption("", action, priority, mouseOverAction, null, 0, null, null)
 	{
-		public Pawn pawn;
-
-		public FloatMenuOptionPawn(Pawn pawn, Action action, MenuOptionPriority priority, Action<Rect> mouseOverAction)
-			: base("", action, priority, mouseOverAction, null, 0, null, null)
-		{
-			this.pawn = pawn;
-		}
+		public Pawn pawn = pawn;
 
 		public override bool DoGUI(Rect rect, bool colonistOrdering, FloatMenu floatMenu)
 		{

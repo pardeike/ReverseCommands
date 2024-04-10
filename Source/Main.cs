@@ -48,7 +48,7 @@ namespace ReverseCommands
 			if (PathInfo.current != null)
 			{
 				var path = PathInfo.GetPath(PathInfo.current);
-				if (path != null) path.DrawPath(null);
+				path?.DrawPath(null);
 			}
 			PathInfo.current = null;
 		}
@@ -59,10 +59,13 @@ namespace ReverseCommands
 	{
 		public static bool Prefix()
 		{
-			if (WorldRendererUtility.WorldRenderedNow) return true;
-			if (Event.current.type != EventType.MouseDown) return true;
+			if (WorldRendererUtility.WorldRenderedNow)
+				return true;
+			if (Event.current.type != EventType.MouseDown)
+				return true;
 			Tools.CloseLabelMenu(true);
-			if (Event.current.button != 1) return true;
+			if (Event.current.button != 1)
+				return true;
 			return !Tools.GetPawnActions().Any();
 		}
 	}
@@ -72,16 +75,20 @@ namespace ReverseCommands
 	{
 		public static bool Prefix()
 		{
-			if (WorldRendererUtility.WorldRenderedNow) return true;
+			if (WorldRendererUtility.WorldRenderedNow)
+				return true;
 
 			if (Event.current.isKey && Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.Escape)
 				Tools.CloseLabelMenu(true);
 
-			if (Event.current.type != EventType.MouseDown) return true;
-			if (Event.current.button != 1) return true;
+			if (Event.current.type != EventType.MouseDown)
+				return true;
+			if (Event.current.button != 1)
+				return true;
 
 			var labeledPawnActions = Tools.GetPawnActions();
-			if (!labeledPawnActions.Any()) return true;
+			if (!labeledPawnActions.Any())
+				return true;
 
 			var cell = UI.MouseCell();
 			Find.CurrentMap.mapPawns.FreeColonists.Where(Tools.PawnUsable).Do(pawn => PathInfo.AddInfo(pawn, cell));

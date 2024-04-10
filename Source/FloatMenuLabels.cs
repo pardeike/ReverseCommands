@@ -15,11 +15,8 @@ namespace ReverseCommands
 		}
 	}
 
-	public class FloatMenuOptionNoClose : FloatMenuOption
+	public class FloatMenuOptionNoClose(string label, Action action) : FloatMenuOption(label, action, MenuOptionPriority.Default, null, null, 0, null, null)
 	{
-		public FloatMenuOptionNoClose(string label, Action action)
-			: base(label, action, MenuOptionPriority.Default, null, null, 0, null, null) { }
-
 		public override bool DoGUI(Rect rect, bool colonistOrdering, FloatMenu floatMenu)
 		{
 			_ = base.DoGUI(rect, colonistOrdering, floatMenu);
