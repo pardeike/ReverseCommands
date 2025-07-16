@@ -4,7 +4,7 @@
 		<ModName>Reverse Commands</ModName>
 		<ModFileName>ReverseCommands</ModFileName>
 		<Repository>https://github.com/pardeike/ReverseCommands</Repository>
-		<ModVersion>2.3.1.0</ModVersion>
+		<ModVersion>2.4.0.0</ModVersion>
 		<ProjectGuid>{7B65D4DA-B570-401B-A0C3-EECCDC285677}</ProjectGuid>
 	</PropertyGroup>
 

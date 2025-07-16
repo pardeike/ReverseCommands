@@ -6,104 +6,102 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Verse;
-using Verse.AI;
 
-namespace ReverseCommands
+namespace ReverseCommands;
+
+[StaticConstructorOnStartup]
+static class Main
 {
-	[StaticConstructorOnStartup]
-	static class Main
+	static Main()
 	{
-		static Main()
-		{
-			var harmony = new Harmony("net.pardeike.reversecommands");
-			harmony.PatchAll();
+		var harmony = new Harmony("net.pardeike.reversecommands");
+		harmony.PatchAll();
 
-			CrossPromotion.Install(76561197973010050);
-		}
+		CrossPromotion.Install(76561197973010050);
+	}
+}
+
+[HarmonyPatch(typeof(PawnPathPool), nameof(PawnPathPool.GetPath))]
+class PawnPathPool_GetPath_Patch
+{
+	public static int AllPawnsSpawnedCountx2(MapPawns instance)
+	{
+		// all we want is some extra allocation
+		return instance.AllPawnsSpawnedCount * 5 + 2;
 	}
 
-	[HarmonyPatch(typeof(PawnPathPool), nameof(PawnPathPool.GetEmptyPawnPath))]
-	class PawnPathPool_GetEmptyPawnPath_Patch
+	public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
 	{
-		public static int AllPawnsSpawnedCountx2(MapPawns instance)
-		{
-			// all we want is some extra allocation
-			return instance.AllPawnsSpawnedCount * 5 + 2;
-		}
-
-		public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
-		{
-			return instructions.MethodReplacer(
-				AccessTools.Method(typeof(MapPawns), "get_AllPawnsSpawnedCount"),
-				SymbolExtensions.GetMethodInfo(() => AllPawnsSpawnedCountx2(default))
-			);
-		}
+		return instructions.MethodReplacer(
+			AccessTools.Method(typeof(MapPawns), "get_AllPawnsSpawnedCount"),
+			SymbolExtensions.GetMethodInfo(() => AllPawnsSpawnedCountx2(default))
+		);
 	}
+}
 
-	[HarmonyPatch(typeof(DynamicDrawManager), nameof(DynamicDrawManager.DrawDynamicThings))]
-	class DynamicDrawManager_DrawDynamicThings_Patch
+[HarmonyPatch(typeof(DynamicDrawManager), nameof(DynamicDrawManager.DrawDynamicThings))]
+class DynamicDrawManager_DrawDynamicThings_Patch
+{
+	public static void Prefix()
 	{
-		public static void Prefix()
+		if (PathInfo.current != null)
 		{
-			if (PathInfo.current != null)
-			{
-				var path = PathInfo.GetPath(PathInfo.current);
-				path?.DrawPath(null);
-			}
-			PathInfo.current = null;
+			var path = PathInfo.GetPath(PathInfo.current);
+			path?.DrawPath(null);
 		}
+		PathInfo.current = null;
 	}
+}
 
-	[HarmonyPatch(typeof(MainTabsRoot), nameof(MainTabsRoot.HandleLowPriorityShortcuts))]
-	class MainTabsRoot_HandleLowPriorityShortcuts_Patch
+[HarmonyPatch(typeof(MainTabsRoot), nameof(MainTabsRoot.HandleLowPriorityShortcuts))]
+class MainTabsRoot_HandleLowPriorityShortcuts_Patch
+{
+	public static bool Prefix()
 	{
-		public static bool Prefix()
-		{
-			if (WorldRendererUtility.WorldRenderedNow)
-				return true;
-			if (Event.current.type != EventType.MouseDown)
-				return true;
+		if (WorldRendererUtility.WorldRendered)
+			return true;
+		if (Event.current.type != EventType.MouseDown)
+			return true;
+		Tools.CloseLabelMenu(true);
+		if (Event.current.button != 1)
+			return true;
+		return !Tools.GetPawnActions().Any();
+	}
+}
+
+[HarmonyPatch(typeof(Selector), nameof(Selector.HandleMapClicks))]
+class Selector_HandleMapClicks_Patch
+{
+	public static bool Prefix()
+	{
+		if (WorldRendererUtility.WorldRendered)
+			return true;
+
+		if (Event.current.isKey && Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.Escape)
 			Tools.CloseLabelMenu(true);
-			if (Event.current.button != 1)
-				return true;
-			return !Tools.GetPawnActions().Any();
-		}
-	}
 
-	[HarmonyPatch(typeof(Selector), nameof(Selector.HandleMapClicks))]
-	class Selector_HandleMapClicks_Patch
-	{
-		public static bool Prefix()
+		if (Event.current.type != EventType.MouseDown)
+			return true;
+		if (Event.current.button != 1)
+			return true;
+
+		var labeledPawnActions = Tools.GetPawnActions();
+		if (!labeledPawnActions.Any())
+			return true;
+
+		var cell = UI.MouseCell();
+		Find.CurrentMap.mapPawns.FreeColonists.Where(Tools.PawnUsable).Do(pawn => PathInfo.AddInfo(pawn, cell));
+
+		var items = labeledPawnActions.Keys.Select(label =>
 		{
-			if (WorldRendererUtility.WorldRenderedNow)
-				return true;
+			var dict = labeledPawnActions[label];
+			return Tools.MakeMenuItemForLabel(label, dict);
+		}).ToList();
 
-			if (Event.current.isKey && Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.Escape)
-				Tools.CloseLabelMenu(true);
+		Tools.labelMenu = new FloatMenuLabels(items);
+		Find.WindowStack.Add(Tools.labelMenu);
 
-			if (Event.current.type != EventType.MouseDown)
-				return true;
-			if (Event.current.button != 1)
-				return true;
-
-			var labeledPawnActions = Tools.GetPawnActions();
-			if (!labeledPawnActions.Any())
-				return true;
-
-			var cell = UI.MouseCell();
-			Find.CurrentMap.mapPawns.FreeColonists.Where(Tools.PawnUsable).Do(pawn => PathInfo.AddInfo(pawn, cell));
-
-			var items = labeledPawnActions.Keys.Select(label =>
-			{
-				var dict = labeledPawnActions[label];
-				return Tools.MakeMenuItemForLabel(label, dict);
-			}).ToList();
-
-			Tools.labelMenu = new FloatMenuLabels(items);
-			Find.WindowStack.Add(Tools.labelMenu);
-
-			Event.current.Use();
-			return false;
-		}
+		Event.current.Use();
+		return false;
 	}
 }
