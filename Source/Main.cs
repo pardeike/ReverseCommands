@@ -58,8 +58,8 @@ class MainTabsRoot_HandleLowPriorityShortcuts_Patch
 {
 	public static bool Prefix()
 	{
-		if (WorldRendererUtility.WorldRendered)
-			return true;
+		//if (WorldRendererUtility.WorldRendered)
+		//	return true;
 		if (Event.current.type != EventType.MouseDown)
 			return true;
 		Tools.CloseLabelMenu(true);
@@ -74,8 +74,8 @@ class Selector_HandleMapClicks_Patch
 {
 	public static bool Prefix()
 	{
-		if (WorldRendererUtility.WorldRendered)
-			return true;
+		//if (WorldRendererUtility.WorldRendered)
+		//	return true;
 
 		if (Event.current.isKey && Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.Escape)
 			Tools.CloseLabelMenu(true);
