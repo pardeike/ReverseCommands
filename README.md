@@ -1,20 +1,21 @@
-## RimWorld ReverseCommands Mod 
+# Reverse Commands
 
-### About
+Reverse Commands changes the order of right-click commands.
 
-Reverse-Commands reverses the context menu in RimWorld so that you can select something to interact with first, followed by selecting the action and the colonist that should execute that action.
+Instead of selecting a colonist first, you can select the thing you want to interact with, choose the action, and then choose who should do it.
 
-No need to select colonists first and much less scrolling through the map.
+It cuts down on map scrolling and makes some command-heavy moments feel more natural, especially when the target is already in front of you.
 
-Powered by [Harmony Patch Library](https://github.com/pardeike/Harmony)
+----
 
-### License
+If you are looking for the Steam Workshop versions:
+https://steamcommunity.com/id/brrainz/myworkshopfiles/
 
-Free. As in free beer. Copy, learn and be respectful.
+For mod support/feedback, visit my Discord:
+https://discord.gg/CYnWvrbNhD
 
-### Contact
+Support me with as little as $1:
+https://patreon.com/pardeike
 
-Andreas Pardeike  
-Email: andreas@pardeike.net  
-Steam: pardeike  
-Twitter: @pardeike
+ENJOY
+/Brrainz
