@@ -4,6 +4,7 @@ using RimWorld;
 using RimWorld.Planet;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using UnityEngine;
 using Verse;
 
@@ -15,7 +16,7 @@ static class Main
 	static Main()
 	{
 		var harmony = new Harmony("net.pardeike.reversecommands");
-		harmony.PatchAll();
+		harmony.PatchAll(Assembly.GetExecutingAssembly());
 
 		CrossPromotion.Install(76561197973010050);
 	}
